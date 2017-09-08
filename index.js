@@ -27,18 +27,18 @@ io.on("connection", function (socket) {
         } else {
             listUser.push(data);
             socket.username = data;
-            socket.emit("Server-send-dk-thanhcong",data);
-            socket.broadcast.emit("Server-send-dk-thanhcong", socket.id + ' : ' + data);
+            socket.emit("Server-send-dk-thanhcong", data);
+            // socket.broadcast.emit("Server-send-dk-thanhcong", socket.id + ' : ' + data);
             io.sockets.emit("Server-send-listUser", listUser);
-
         }
+    });
 
-        // tra ve cho ng goi
-        // socket.emit("Server-send-data", socket.id + ' : ' + data);
-
-        // goi cho moi ng tru ng goi
-        // socket.broadcast.emit("Server-send-data", socket.id + ' : ' + data);
-    })
+    socket.on("Client-send-logout", function (data) {
+        listUser.splice(
+            listUser.indexOf(socket.username), 1
+        );
+        socket.broadcast.emit("Server-send-listUser", listUser);
+    });
 });
 
 
