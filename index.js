@@ -6,12 +6,16 @@ app.set("views", "./views");
 
 var server = require("http").Server(app);
 var io = require("socket.io")(server);
-server.listen(3000);
+server.listen(process.env.PORT || 3000);
 
-var listUser = ['phuocdungit'];
+var listUser = [];
 
 io.on("connection", function (socket) {
     console.log("co ai do dang ket noi" + socket.id);
+    listUser.splice(
+        listUser.indexOf(socket.username), 1
+    );
+    socket.broadcast.emit("Server-send-listUser", listUser);
 
     socket.on("disconnect", function () {
         console.log(socket.id + " : ngat ke noi");
@@ -31,6 +35,9 @@ io.on("connection", function (socket) {
             // socket.broadcast.emit("Server-send-dk-thanhcong", socket.id + ' : ' + data);
             io.sockets.emit("Server-send-listUser", listUser);
         }
+    });
+    socket.on("Client-send-text", function (data) {
+        io.sockets.emit("Server-send-text", {name:socket.username,text:data});
     });
 
     socket.on("Client-send-logout", function (data) {

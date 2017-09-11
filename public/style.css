@@ -32,6 +32,7 @@
     font-weight: 700;
 }
 #listmess{
-    min-height: 200px;
+    height: 200px;
     background: #ece3e3;
+    overflow-y: auto;
 }
